@@ -1,0 +1,31 @@
+# Runtime state — contains real OAuth tokens and app secrets. Never commit.
+state/
+var/
+
+# Dependencies are linked from the HDS profile at development time; the project
+# itself has zero npm dependencies, so nothing here should ever be tracked.
+node_modules/
+
+# The real config holds machine-specific absolute paths; the tracked template is
+# config/config.example.json.
+config/config.json
+
+# Local environment overrides (may hold BAIDU_* credentials).
+.env
+.env.local
+*.env
+
+# Logs and partial downloads.
+*.log
+*.part
+
+# Editor / OS noise.
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Packaged artifacts.
+*.tgz
+*.zip

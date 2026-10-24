@@ -1,0 +1,38 @@
+{
+  "name": "hds-baidu-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HDS × Baidu Netdisk: writable MCP tools, local mirror sync, native DSH storage backend, backup and restore.",
+  "type": "module",
+  "bin": {
+    "hds-baidu": "./bin/hds-baidu.mjs"
+  },
+  "scripts": {
+    "doctor": "node ./bin/hds-baidu.mjs doctor",
+    "mcp": "node ./bin/hds-baidu.mjs mcp",
+    "test": "node --test test/*.test.mjs",
+    "demo": "node ./scripts/demo.mjs",
+    "backup:plan": "node ./bin/hds-baidu.mjs backup plan",
+    "backup:run": "node ./bin/hds-baidu.mjs backup run --apply",
+    "backup:watch": "node ./bin/hds-baidu.mjs backup watch --interval 1h",
+    "mirror:status": "node ./bin/hds-baidu.mjs mirror status",
+    "manifest": "node ./bin/hds-baidu.mjs manifest"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "yaml": "^2.5.0"
+  },
+  "optionalDependencies": {},
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "hds",
+    "baidu-netdisk",
+    "mcp",
+    "backup",
+    "storage-backend"
+  ]
+}

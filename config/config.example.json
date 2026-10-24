@@ -1,0 +1,59 @@
+{
+  "remoteRoot": "/HDS",
+  "local": {
+    "root": "G:\\path\\to\\hds-baidu-bridge",
+    "stateDir": "G:\\path\\to\\hds-baidu-bridge\\state",
+    "mirrorDir": "G:\\path\\to\\hds-baidu-bridge\\mirrors",
+    "stagingDir": "G:\\path\\to\\hds-baidu-bridge\\var\\staging",
+    "allowedDrives": ["G"]
+  },
+  "hds": {
+    "home": "G:\\.dsh",
+    "profile": "desktop",
+    "sessionsDir": "G:\\.dsh\\sessions",
+    "storagesDir": "G:\\.dsh\\storages"
+  },
+  "sync": {
+    "exclude": [
+      ".git/**",
+      "node_modules/**",
+      ".venv/**",
+      "__pycache__/**",
+      ".pytest_cache/**",
+      ".mypy_cache/**",
+      ".next/**",
+      "dist/**",
+      "build/**",
+      "target/**",
+      ".cache/**",
+      "**/*.pyc",
+      "**/.DS_Store",
+      "**/Thumbs.db",
+      "**/*.part",
+      ".hds-baidu/**"
+    ],
+    "concurrency": 3,
+    "conflictPolicy": "skip"
+  },
+  "backup": {
+    "sources": {
+      "sessions": true,
+      "workspaceRegistry": true,
+      "sessionProjectionCache": false,
+      "profileConfig": false
+    },
+    "projects": [],
+    "includeProjectGitBundle": true,
+    "maxFileBytes": 5368709120
+  },
+  "storageBackend": {
+    "remoteRoot": "/HDS/dsh",
+    "cacheRoot": "G:\\path\\to\\hds-baidu-bridge\\var\\dsh-storage-cache",
+    "offlinePolicy": "reject",
+    "requestTimeoutMs": 120000
+  },
+  "mcp": {
+    "serverName": "hds-baidu",
+    "allowDestructiveTools": false
+  }
+}
