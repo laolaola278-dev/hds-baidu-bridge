@@ -25,7 +25,7 @@ node .\bin\hds-baidu.mjs backup list
 把项目目录复制到新机器的 G 盘，例如：
 
 ```text
-G:\project\deepseek-harness\work_hds\hds-baidu-bridge
+G:\path\to\hds-baidu-bridge
 ```
 
 ### 1.2 安装 Node
@@ -204,7 +204,7 @@ Get-ChildItem "G:\...\state\restore-safety\<timestamp>" -Recurse
 用假客户端可以在不碰真网盘的情况下演练：
 
 ```powershell
-$env:TEMP='G:\project\deepseek-harness\work_hds\hds-baidu-bridge\var\tmp'
+$env:TEMP='G:\path\to\hds-baidu-bridge\var\tmp'
 node --test test/backup-restore.test.mjs
 ```
 

@@ -24,9 +24,9 @@ G:\.dsh\profiles\desktop\cordis.patch.yml   ← 末尾一段，id 是 'mcp-hds-b
   config:
     transport: 'stdio'
     serverName: 'hds-baidu'
-    command: 'D:\前端\nodejs\node.exe'
+    command: 'D:\path\to\node.exe'
     args:
-      - 'G:\project\deepseek-harness\work_hds\hds-baidu-bridge\mcp-server.mjs'
+      - 'G:\path\to\hds-baidu-bridge\mcp-server.mjs'
     env:
       HDS_BAIDU_CONFIG: 'G:\...\config\config.json'
     toolCallTimeoutMs: 120000
@@ -66,7 +66,7 @@ HDS 界面上工具调用会显示出来，带参数和返回值。你可以不�
 同一套能力，换成命令行：
 
 ```powershell
-cd G:\project\deepseek-harness\work_hds\hds-baidu-bridge
+cd G:\path\to\hds-baidu-bridge
 node bin/hds-baidu.mjs <子命令>
 ```
 

@@ -5,7 +5,7 @@
 - Windows 10/11
 - Node.js ≥ 22（本项目只用标准库，不需要 `npm install`）
 - 百度网盘开发者应用，已获取 access token
-- 所有项目文件在 G 盘（默认 `G:\project\deepseek-harness\work_hds\hds-baidu-bridge`）
+- 所有项目文件在 G 盘（默认 `G:\path\to\hds-baidu-bridge`）
 
 ## 首次配置
 
@@ -144,7 +144,7 @@ node .\bin\hds-baidu.mjs restore apply 2026-10-24T09-12-17-168Z --plan-digest <d
 ```powershell
 node .\bin\hds-baidu.mjs restore plan <id> `
   --map-hds-home G:\.dsh `
-  --map-project work_hds=G:\project\deepseek-harness\work_hds
+  --map-project work_hds=G:\path\to\workspace
 ```
 
 ### 接入 HDS
@@ -305,7 +305,7 @@ Get-ScheduledTask -TaskName 'HDS-Baidu-Backup'
 Get-ScheduledTaskInfo -TaskName 'HDS-Baidu-Backup'
 ```
 
-检查“上次运行结果”和“上次运行时间”。常见原因：Node 路径含非 ASCII 字符（本机是 `D:\前端\nodejs\node.exe`），或计划任务没有该用户的环境变量。
+检查“上次运行结果”和“上次运行时间”。常见原因：Node 路径含非 ASCII 字符（本机是 `D:\path\to\node.exe`），或计划任务没有该用户的环境变量。
 
 解决办法：在任务里显式设置环境变量，或改用 `backup watch` 常驻进程。
 

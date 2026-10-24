@@ -79,7 +79,7 @@ oob
 ### 方式 A：用项目自带的命令（推荐）
 
 ```powershell
-cd G:\project\deepseek-harness\work_hds\hds-baidu-bridge
+cd G:\path\to\hds-baidu-bridge
 
 # 把两个值换成你自己的
 node .\bin\hds-baidu.mjs token login --client-id 你的AppKey --client-secret 你的SecretKey
@@ -186,7 +186,7 @@ Get-Content G:\tmp-test-back.txt
 默认写在：
 
 ```text
-G:\project\deepseek-harness\work_hds\hds-baidu-bridge\state\credentials.json
+G:\path\to\hds-baidu-bridge\state\credentials.json
 ```
 
 内容大致是：

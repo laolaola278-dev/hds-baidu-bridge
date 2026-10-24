@@ -125,7 +125,7 @@ file_list    : d555ad0cei2f34ee8115174535102cc0   ← 含字母 i
 
 **验证**：所有 `state/` 下文件都在 `G:\project\...\hds-baidu-bridge\state\`。凭证、日志、同步清单、恢复安全副本，一个没漏。
 
-> 一个诚实的边界：DSH 自己会往 `C:\Users\JianXi\AppData\Local\Temp\dsh-spill-*` 写临时文件。那是宿主行为，不在本项目控制范围内。我没有去改它。
+> 一个诚实的边界：DSH 自己会往 `%LOCALAPPDATA%\Temp\dsh-spill-*` 写临时文件。那是宿主行为，不在本项目控制范围内。我没有去改它。
 
 ---
 
@@ -179,7 +179,7 @@ file_list    : d555ad0cei2f34ee8115174535102cc0   ← 含字母 i
 ## 如果你想继续
 
 ```powershell
-cd G:\project\deepseek-harness\work_hds\hds-baidu-bridge
+cd G:\path\to\hds-baidu-bridge
 
 npm test                      # 128 个测试
 node scripts/demo.mjs         # 10 个场景端到端演示

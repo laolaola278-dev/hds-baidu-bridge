@@ -232,7 +232,7 @@ node .\bin\hds-baidu.mjs mirror demo /HDS/projects/demo --apply
 输出中的 `localRoot` 例如：
 
 ```text
-G:\project\deepseek-harness\work_hds\hds-baidu-bridge\mirrors\demo
+G:\path\to\hds-baidu-bridge\mirrors\demo
 ```
 
 在 HDS 里把这个目录添加为 Workspace。之后启动守护进程：
@@ -276,7 +276,7 @@ node .\bin\hds-baidu.mjs project apply G:\project\demo /HDS/projects/demo --appl
 
 ```powershell
 node .\bin\hds-baidu.mjs backup plan
-node .\bin\hds-baidu.mjs backup plan --project G:\project\deepseek-harness\work_hds
+node .\bin\hds-baidu.mjs backup plan --project G:\path\to\workspace
 ```
 
 执行：
@@ -326,7 +326,7 @@ node .\bin\hds-baidu.mjs restore apply <snapshot-id> --plan-digest <digest> --ap
 ```powershell
 node .\bin\hds-baidu.mjs restore plan <snapshot-id> `
   --map-hds-home G:\.dsh `
-  --map-project work_hds=G:\project\deepseek-harness\work_hds
+  --map-project work_hds=G:\path\to\workspace
 ```
 
 注意：**HDS 会话头里的 `cwd` 不会自动改写**，因为会话是 zstd 压缩的 JSONL。恢复后如果路径变了，在 HDS Workspace UI 里重新添加工程即可；已有会话仍可按原路径显示。这是有意为之，避免破坏会话日志。
@@ -483,7 +483,7 @@ HDS 和工程工具需要：
 ## 测试与演示
 
 ```powershell
-$env:TEMP='G:\project\deepseek-harness\work_hds\hds-baidu-bridge\var\tmp'
+$env:TEMP='G:\path\to\hds-baidu-bridge\var\tmp'
 $env:TMP=$env:TEMP
 $env:TMPDIR=$env:TEMP
 node --test test/*.test.mjs
