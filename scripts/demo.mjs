@@ -15,13 +15,11 @@ import { MirrorDaemon, mirrorStatePath } from '../src/watch.mjs'
  * feature the project claims, on the approved drive, without network access or
  * a real token. Run it with `node scripts/demo.mjs`.
  */
-const base = 'G:\\project\\deepseek-harness\\work_hds\\hds-baidu-bridge\\var\\demo'
-
 function step(name) {
   process.stdout.write(`\n=== ${name} ===\n`)
 }
 
-const root = await makeTestRoot(base, 'demo')
+const root = await makeTestRoot('demo')
 const client = new FakeBaiduClient()
 
 const config = {

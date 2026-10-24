@@ -27,19 +27,25 @@ test('embedded single quotes are doubled', yaml, () => {
   assert.equal(parsed[0].insert[0].name, "a'b")
 })
 
+// Neutral placeholder paths: these assertions are about YAML round-tripping
+// (backslashes, quoting, nesting), not about this project's real location.
+const NODE = 'D:\\tools\\nodejs\\node.exe'
+const SERVER = 'G:\\work\\hds-baidu-bridge\\mcp-server.mjs'
+const CONFIG = 'G:\\work\\hds-baidu-bridge\\config\\config.json'
+
 test('MCP patch round-trips through a YAML parser', yaml, () => {
   const text = toYamlPatch(mcpPatchEntries({
-    node: 'D:\\前端\\nodejs\\node.exe',
-    server: 'G:\\project\\hds-baidu-bridge\\mcp-server.mjs',
-    configPath: 'G:\\project\\hds-baidu-bridge\\config\\config.json',
+    node: NODE,
+    server: SERVER,
+    configPath: CONFIG,
   }))
   const parsed = parse(text)
   const config = parsed[0].insert[0].config
   assert.equal(parsed[0].insert[0].id, 'mcp-hds-baidu')
   assert.equal(parsed[0].insert[0].name, '@deepseek-ai/dsh-mcp-client')
-  assert.equal(config.command, 'D:\\前端\\nodejs\\node.exe')
-  assert.deepEqual(config.args, ['G:\\project\\hds-baidu-bridge\\mcp-server.mjs'])
-  assert.equal(config.env.HDS_BAIDU_CONFIG, 'G:\\project\\hds-baidu-bridge\\config\\config.json')
+  assert.equal(config.command, NODE)
+  assert.deepEqual(config.args, [SERVER])
+  assert.equal(config.env.HDS_BAIDU_CONFIG, CONFIG)
   assert.equal(config.toolCallTimeoutMs, 120000)
   assert.equal(config.failOnStartupError, false)
   assert.deepEqual(config.reconnect, { enabled: true })

@@ -32,11 +32,20 @@ try {
 } catch (error) {
   pluginLoadError = error
 }
-const PROFILE_MODULES = 'G:\\.dsh\\profiles\\node_modules'
-const DSH_STORAGE_LIB = 'G:\\project\\deepseek-harness\\deepseek-harness-master\\apps\\cli\\node_modules\\@deepseek-ai\\dsh-web-app\\node_modules\\@deepseek-ai\\dsh-storage\\lib\\index.js'
-const DSH_DOMAIN_LIB = 'G:\\project\\deepseek-harness\\deepseek-harness-master\\apps\\cli\\node_modules\\@deepseek-ai\\dsh-web-app\\node_modules\\@deepseek-ai\\dsh-storage-domain\\lib\\index.js'
+/**
+ * Resolve the DSH packages without baking a developer's absolute paths into the
+ * repository. `DSH_HOME` gives the profile root; the individual library paths
+ * can be overridden for an install that is laid out differently.
+ */
+const HDS_HOME = process.env.DSH_HOME || undefined
+const PROFILE_MODULES = HDS_HOME ? path.join(HDS_HOME, 'profiles', 'node_modules') : undefined
+const DSH_STORAGE_LIB = process.env.DSH_STORAGE_LIB
+  || (PROFILE_MODULES ? path.join(PROFILE_MODULES, '@deepseek-ai', 'dsh-storage', 'lib', 'index.js') : undefined)
+const DSH_DOMAIN_LIB = process.env.DSH_STORAGE_DOMAIN_LIB
+  || (PROFILE_MODULES ? path.join(PROFILE_MODULES, '@deepseek-ai', 'dsh-storage-domain', 'lib', 'index.js') : undefined)
 
 async function loadRealPackages() {
+  if (!PROFILE_MODULES || !DSH_STORAGE_LIB || !DSH_DOMAIN_LIB) return undefined
   const cordisEntry = path.join(PROFILE_MODULES, '@deepseek-ai', 'cordis', 'lib', 'index.js')
   for (const file of [cordisEntry, DSH_STORAGE_LIB, DSH_DOMAIN_LIB]) {
     const present = await fsp.stat(file).then(stat => stat.isFile(), () => false)
@@ -52,7 +61,7 @@ async function loadRealPackages() {
 const real = await loadRealPackages()
 const skip = !BaiduStorageBackend
   ? `plugin cannot load without @deepseek-ai/dsh-storage (${pluginLoadError?.code ?? pluginLoadError?.message})`
-  : (real ? false : 'DSH packages are not installed on this machine')
+  : (real ? false : 'set DSH_HOME (and DSH_STORAGE_LIB / DSH_STORAGE_DOMAIN_LIB if needed) to a DSH install')
 
 /**
  * Minimal schema stand-in for the domain layer.

@@ -2,9 +2,11 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import path from 'node:path'
 import fsp from 'node:fs/promises'
-import { pathToFileURL } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { yamlParse as parse, hasYaml, YAML_SKIP } from './helpers/optional-yaml.mjs'
 import { mcpPatchEntries, storageBackendPatchEntries, toYamlPatch } from '../src/patch.mjs'
+
+const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 /**
  * Validate the YAML we install against the REAL plugin config schemas.
@@ -14,12 +16,22 @@ import { mcpPatchEntries, storageBackendPatchEntries, toYamlPatch } from '../src
  * typo in a key, an unknown enum value or a bad `serverName` would only surface
  * when the profile is loaded, long after the patch was written. These tests
  * feed the generated rows through the packages' own Schemastery `Config`.
+ *
+ * The DSH packages are located relative to `DSH_HOME` when it is set, and via
+ * `DSH_MCP_CLIENT_LIB` as an explicit override. Hard-coding a developer's
+ * absolute path made every checkout elsewhere skip for the wrong reason and
+ * leaked that layout into the repository.
  */
-const PROFILE_MODULES = 'G:\\.dsh\\profiles\\node_modules'
-const MCP_CLIENT_LIB = 'G:\\project\\deepseek-harness\\deepseek-harness-master\\apps\\cli\\node_modules\\@deepseek-ai\\dsh-mcp-client\\lib\\index.js'
-const STORAGE_BAIDU_LIB = path.join('G:\\project\\deepseek-harness\\work_hds\\hds-baidu-bridge', 'plugin', 'dsh-storage-baidu', 'index.js')
+const HDS_HOME = process.env.DSH_HOME || undefined
+const PROFILE_MODULES = HDS_HOME ? path.join(HDS_HOME, 'profiles', 'node_modules') : undefined
+const MCP_CLIENT_LIB = process.env.DSH_MCP_CLIENT_LIB
+  || (PROFILE_MODULES
+    ? path.join(PROFILE_MODULES, '@deepseek-ai', 'dsh-mcp-client', 'lib', 'index.js')
+    : undefined)
+const STORAGE_BAIDU_LIB = path.resolve(PROJECT_ROOT, 'plugin', 'dsh-storage-baidu', 'index.js')
 
 async function loadConfigs() {
+  if (!MCP_CLIENT_LIB) return undefined
   const mcpPresent = await fsp.stat(MCP_CLIENT_LIB).then(stat => stat.isFile(), () => false)
   if (!mcpPresent) return undefined
   const mcp = await import(pathToFileURL(MCP_CLIENT_LIB).href)
@@ -29,14 +41,14 @@ async function loadConfigs() {
 const real = await loadConfigs()
 const skip = real
   ? (hasYaml ? false : YAML_SKIP)
-  : 'the dsh-mcp-client package is not installed on this machine'
+  : 'set DSH_HOME or DSH_MCP_CLIENT_LIB to a DSH install to run this contract check'
 const skipYaml = hasYaml ? false : YAML_SKIP
 
 test('the installed MCP row satisfies the real mcp-client Config schema', { skip }, () => {
   const entries = mcpPatchEntries({
     node: process.execPath,
-    server: path.join('G:\\project\\deepseek-harness\\work_hds\\hds-baidu-bridge', 'mcp-server.mjs'),
-    configPath: path.join('G:\\project\\deepseek-harness\\work_hds\\hds-baidu-bridge', 'config', 'config.json'),
+    server: path.resolve(PROJECT_ROOT, 'mcp-server.mjs'),
+    configPath: path.resolve(PROJECT_ROOT, 'config', 'config.json'),
     serverName: 'hds-baidu',
   })
   const parsed = parse(toYamlPatch(entries))
@@ -51,7 +63,7 @@ test('the installed MCP row satisfies the real mcp-client Config schema', { skip
   assert.equal(config.command, process.execPath)
   assert.equal(config.failOnStartupError, false)
   assert.equal(config.reconnect.enabled, true)
-  assert.equal(config.env.HDS_BAIDU_CONFIG, path.join('G:\\project\\deepseek-harness\\work_hds\\hds-baidu-bridge', 'config', 'config.json'))
+  assert.equal(config.env.HDS_BAIDU_CONFIG, path.resolve(PROJECT_ROOT, 'config', 'config.json'))
   // The token must never be baked into the profile.
   assert.equal(Object.keys(config.env).includes('BAIDU_NETDISK_ACCESS_TOKEN'), false)
 })
@@ -81,7 +93,7 @@ test('a name that fails the real schema is rejected before it reaches the profil
 test('the storage backend row keeps every key the plugin actually reads', { skip: skipYaml }, async () => {
   const entries = storageBackendPatchEntries({
     remoteRoot: '/HDS/dsh',
-    cacheRoot: 'G:\\project\\deepseek-harness\\work_hds\\hds-baidu-bridge\\var\\dsh-storage-cache',
+    cacheRoot: path.resolve(PROJECT_ROOT, 'var', 'dsh-storage-cache'),
     offlinePolicy: 'reject',
     allowedDrive: 'G',
   })
